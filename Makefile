@@ -32,6 +32,6 @@ run: $(BINARY)
 	./$(BINARY)
 
 clean:
-	rm -rf "$(BUILDDIR)" "$(BINARY)"
+	rm -rf "$(BUILDDIR)" "$(BINARY)" *.wav
 
 .PHONY: clean run

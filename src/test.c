@@ -13,6 +13,12 @@ void test_all() {
 	test_ch02_discontinuous_sine();
 	test_ch02_continuous_sine();
 	test_ch02_vanilla_sine();
+	test_ch02_quiet_sine();
+	test_ch02_clipping_sine();
+	test_ch02_square();
+	test_ch02_triangle();
+	test_ch02_noise();
+	test_ch02_noise_intense();
 }
 
 void test_ch01_mono_sawtooth() {
@@ -144,4 +150,112 @@ void test_ch02_vanilla_sine() {
 	}
 
 	write_wave_file("sine.wav", data, nsamples, nchannels, sample_rate);
+}
+
+void test_ch02_quiet_sine() {
+	int sample_rate = SAMPLE_RATE;
+	int nseconds = TEST_DURATION;
+	int nchannels = 1;
+	float phase = 0;
+	float frequency = calc_frequency(3, 3);
+
+	// create buffer for samples
+	int nsamples = sample_rate * nchannels * nseconds;
+	float data[nsamples];
+
+	for (int i = 0; i < nsamples; i++) {
+		data[i] = advance_osc_sine(&phase, frequency, (float) sample_rate) * 0.4f;
+	}
+
+	write_wave_file("sinequiet.wav", data, nsamples, nchannels, sample_rate);
+}
+
+void test_ch02_clipping_sine() {
+	int sample_rate = SAMPLE_RATE;
+	int nseconds = TEST_DURATION;
+	int nchannels = 1;
+	float phase = 0;
+	float frequency = calc_frequency(3, 3);
+
+	// create buffer for samples
+	int nsamples = sample_rate * nchannels * nseconds;
+	float data[nsamples];
+
+	for (int i = 0; i < nsamples; i++) {
+		data[i] = advance_osc_sine(&phase, frequency, (float) sample_rate) * 1.4f;
+	}
+
+	write_wave_file("sineclip.wav", data, nsamples, nchannels, sample_rate);
+}
+
+void test_ch02_square() {
+	int sample_rate = SAMPLE_RATE;
+	int nseconds = TEST_DURATION;
+	int nchannels = 1;
+	float phase = 0;
+	float frequency = calc_frequency(3, 3);
+
+	// create buffer for samples
+	int nsamples = sample_rate * nchannels * nseconds;
+	float data[nsamples];
+
+	for (int i = 0; i < nsamples; i++) {
+		data[i] = advance_osc_square(&phase, frequency, (float) sample_rate);
+	}
+
+	write_wave_file("square.wav", data, nsamples, nchannels, sample_rate);
+}
+
+void test_ch02_triangle() {
+	int sample_rate = SAMPLE_RATE;
+	int nseconds = TEST_DURATION;
+	int nchannels = 1;
+	float phase = 0;
+	float frequency = calc_frequency(3, 3);
+
+	// create buffer for samples
+	int nsamples = sample_rate * nchannels * nseconds;
+	float data[nsamples];
+
+	for (int i = 0; i < nsamples; i++) {
+		data[i] = advance_osc_triangle(&phase, frequency, (float) sample_rate);
+	}
+
+	write_wave_file("triangle.wav", data, nsamples, nchannels, sample_rate);
+}
+
+void test_ch02_noise() {
+	int sample_rate = SAMPLE_RATE;
+	int nseconds = TEST_DURATION;
+	int nchannels = 1;
+	float phase = 0;
+	float frequency = calc_frequency(3, 3);
+
+	// create buffer for samples
+	int nsamples = sample_rate * nchannels * nseconds;
+	float data[nsamples];
+
+	for (int i = 0; i < nsamples; i++) {
+		data[i] = advance_osc_noise(&phase, frequency, (float) sample_rate, i > 0 ? data[i - 1] : 0.0f);
+	}
+
+	write_wave_file("noise.wav", data, nsamples, nchannels, sample_rate);
+}
+
+void test_ch02_noise_intense() {
+	int sample_rate = SAMPLE_RATE;
+	int nseconds = TEST_DURATION;
+	int nchannels = 1;
+	float phase = 0;
+	float frequency = calc_frequency(3, 3);
+
+	// create buffer for samples
+	int nsamples = sample_rate * nchannels * nseconds;
+	float data[nsamples];
+
+	for (int i = 0; i < nsamples; i++) {
+		data[i] = advance_osc_noise_intense(&phase, frequency, (float) sample_rate, i > 0 ? data[i - 1] : 0.0f);
+	}
+
+	write_wave_file("noiseintense.wav", data, nsamples, nchannels, sample_rate);
 }
