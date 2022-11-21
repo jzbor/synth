@@ -14,3 +14,4 @@ void test_ch02_square();
 void test_ch02_triangle();
 void test_ch02_noise();
 void test_ch02_noise_intense();
+void test_ch02_song();

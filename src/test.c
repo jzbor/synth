@@ -20,6 +20,7 @@ void test_all() {
 	test_ch02_triangle();
 	test_ch02_noise();
 	test_ch02_noise_intense();
+	test_ch02_song();
 }
 
 void test_ch01_mono_sawtooth() {
@@ -277,4 +278,75 @@ void test_ch02_noise_intense() {
 	}
 
 	write_wave_file("noiseintense.wav", data, nsamples, nchannels, sample_rate);
+}
+
+void test_ch02_song() {
+	int sample_rate = SAMPLE_RATE;
+	int nseconds = TEST_DURATION;
+	int nchannels = 1;
+	float phase = 0;
+
+	// create buffer for samples
+	int nsamples = sample_rate * nchannels * nseconds;
+	float data[nsamples];
+
+	for (int i = 0; i < nsamples; i++) {
+		// calculate which quarter note we are on
+		int quarter_note = i * 4 / sample_rate;
+		float quarter_note_percent = (float) ((i * 4) % sample_rate) / (float) sample_rate;
+
+		// intentionally add a "pop" noise mid way through the 3rd quarter note
+		if (i == sample_rate * 3 / 4 + sample_rate / 8) {
+			data[i] = -1.0f;
+			continue;
+		}
+
+		// play different notes depending on the quarter note
+		switch (quarter_note % 16) {
+			case 0:
+				data[i] = advance_osc_sine(&phase, calc_frequency(4, 0), (float) sample_rate);
+				break;
+			case 1:
+				data[i] = advance_osc_sine(&phase, calc_frequency(4, 2), (float) sample_rate);
+				break;
+			case 2:
+			case 3:
+				data[i] = advance_osc_sine(&phase, calc_frequency(4, 5), (float) sample_rate);
+				break;
+			case 4:
+				data[i] = advance_osc_sine(&phase, calc_frequency(4, 5 - quarter_note_percent * 2.0f), (float) sample_rate);
+				break;
+			case 5:
+				data[i] = advance_osc_sine(&phase, calc_frequency(4, 3 - quarter_note_percent * 2.0f), (float) sample_rate);
+				break;
+			case 6:
+				data[i] = advance_osc_sine(&phase, calc_frequency(4, 5 - quarter_note_percent * 2.0f), (float) sample_rate);
+				break;
+			case 8:
+				data[i] = advance_osc_saw(&phase, calc_frequency(4, 0), (float) sample_rate);
+				break;
+			case 9:
+				data[i] = advance_osc_saw(&phase, calc_frequency(4, 2), (float) sample_rate);
+				break;
+			case 10:
+			case 11:
+				data[i] = advance_osc_saw(&phase, calc_frequency(4, 5), (float) sample_rate);
+				break;
+			case 12:
+				data[i] = advance_osc_saw(&phase, calc_frequency(4, 5 - quarter_note_percent * 2.0f), (float) sample_rate);
+				break;
+			case 13:
+				data[i] = advance_osc_saw(&phase, calc_frequency(4, 3 - quarter_note_percent * 2.0f), (float) sample_rate);
+				break;
+				break;
+			case 14:
+				data[i] = advance_osc_saw(&phase, calc_frequency(4, 5 - quarter_note_percent * 2.0f), (float) sample_rate);
+				break;
+			default:
+				data[i] = 0;
+				break;
+		}
+	}
+
+	write_wave_file("song.wav", data, nsamples, nchannels, sample_rate);
 }
