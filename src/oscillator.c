@@ -48,6 +48,19 @@ float advance_osc_sine(float *phase, float frequency, float sample_rate) {
 	return sin(*phase);
 }
 
+float advance_osc_saw(float *phase, float frequency, float sample_rate) {
+	*phase += frequency / sample_rate;
+
+	while (*phase > 1.0f) {
+		*phase -= 1.0f;
+	}
+	while (*phase < 0.0f) {
+		*phase += 1.0f;
+	}
+
+	return (*phase * 2.0f) - 1.0f;
+}
+
 float advance_osc_square(float *phase, float frequency, float sample_rate) {
 	*phase += frequency / sample_rate;
 

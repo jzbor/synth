@@ -9,6 +9,7 @@ void test_ch02_continuous_sine();
 void test_ch02_vanilla_sine();
 void test_ch02_quiet_sine();
 void test_ch02_clipping_sine();
+void test_ch02_saw();
 void test_ch02_square();
 void test_ch02_triangle();
 void test_ch02_noise();
