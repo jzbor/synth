@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdio.h>
+
 // MACRO DEFINITIONS
 #define DBGPRINT(fmt, ...) do { \
     fprintf(stderr, "%s:%d:%s(): " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__); \
